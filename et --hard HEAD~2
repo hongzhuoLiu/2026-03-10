@@ -1,0 +1,30 @@
+[33mccedd15[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mnotify-xiaoyu2[m[33m, [m[1;31morigin/notify-xiaoyu2[m[33m)[m feat: remove security question flow from ChangePasswordForm
+[33m2636fde[m feat: remove security question flow from ChangePasswordForm
+[33mf6e8f18[m[33m ([m[1;31morigin/develop[m[33m)[m Merge pull request #258 from StudentsChoiceProject/248-p1-search-page-background-panel-colour-inconsistent-with-site-default-light-dark-modes
+[33mc9dcba3[m Update deploy-develop.yml
+[33m261bff9[m Update deploy-develop.yml
+[33mf4f6104[m trigger deploy test
+[33me0dc4ea[m[33m ([m[1;31morigin/reapply-enablePost[m[33m)[m Update package.json
+[33m3dda2d2[m Update deploy-develop.yml
+[33mbeb9869[m Create deploy-develop.yml
+[33mc3d0875[m Merge pull request #251 from StudentsChoiceProject/choice-interface/feat/mobile-layout-bugfix-clean
+[33m15584bf[m[33m ([m[1;31morigin/248-p1-search-page-background-panel-colour-inconsistent-with-site-default-light-dark-modes[m[33m)[m Merge branch 'develop' into 248-p1-search-page-background-panel-colour-inconsistent-with-site-default-light-dark-modes
+[33mb266173[m Implement dark mode and B/W mode handling in SearchPage component
+[33m264ea48[m Merge pull request #257 from StudentsChoiceProject/group-notification-SEO
+[33m5a475c7[m Merge branch 'develop' into group-notification-SEO
+[33m789d9eb[m Merge pull request #249 from StudentsChoiceProject/247-p1-search-feature-improvements
+[33m6ddbe7b[m UI: shrink destination address pill & rating badge; universities grid 2-cols on mobile (clean reapply)
+[33me181dbb[m[33m ([m[1;31morigin/247-p1-search-feature-improvements[m[33m)[m style(cards): align university names to top of logos and adjust spacing
+[33mdd0fbe3[m refactor(SearchResultCard): remove rating display for helpful links
+[33mfa2891e[m feat(ui): add accent class to checkboxes in RefineResultsPanel for improved styling
+[33ma3a2017[m feat(ui): place university logos on grey tiles for visibility in light/dark modes
+[33m5b6ad0d[m Refactor MobSearch component to remove unused fuzzy search logic and simplify search handling
+[33mc0ebe7c[m Each university's website has its own title and description, and uses icons to show stars.
+[33medb31c3[m Merge pull request #242 from StudentsChoiceProject/rebuild-trigger
+[33m94a75fc[m[33m ([m[1;31morigin/rebuild-trigger[m[33m)[m include tag in comment
+[33mec0b5cf[m improve the title and description for subject page
+[33m4a6d718[m improve the title and description for universities page
+[33mfd4f289[m improve the title and description for program page
+[33m55e0532[m improve the title and description for aboutus page
+[33m67fe8d8[m Merge pull request #238 from StudentsChoiceProject/choice-interface/bugfix/two-significant-figures-and-one-decimal-point-for-ratings-on-all-pages
+[33m5d8987b[m Merge pull request #234 from StudentsChoiceProject/interface-feature-share-platforms

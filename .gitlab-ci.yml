@@ -1,0 +1,186 @@
+stages:
+  - build
+  - JestTests
+  - PlaywrightTests-Integration
+  - PlaywrightTests-System
+  - deploy
+
+
+
+
+build:
+  stage: build
+  tags:
+    - production
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+
+#This is for not have to 'npm install' in every single step to save time
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+
+Jest auto pass:
+  stage: JestTests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npx jest jestTests/test1.spec.js
+  artifacts:
+    when: always
+    paths:
+      - jest-report/
+  allow_failure: true
+
+dateFormatter:
+  stage: JestTests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npx jest jestTests/formatDate.spec.js
+  artifacts:
+    when: always
+    paths:
+      - jest-report/
+  allow_failure: true
+
+getPostData:
+  stage: JestTests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npx jest jestTests/getPostData.spec.js
+  artifacts:
+    when: always
+    paths:
+      - jest-report/
+  allow_failure: true
+
+handleSubmit:
+  stage: JestTests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npx jest jestTests/handleSubmit.spec.js
+  artifacts:
+    when: always
+    paths:
+      - jest-report/
+  allow_failure: true
+
+
+Playwright auto fail:
+   stage: PlaywrightTests-Integration
+   cache:
+     key: ${CI_COMMIT_REF_SLUG}
+     paths:
+       - node_modules/
+   script:
+     - npm run start &
+     - npx playwright test playwrightTests/test1.spec.js
+   artifacts:
+     when: always
+     paths:
+       - playwright-report/
+   allow_failure: true
+
+Playwright auto pass:
+   stage: PlaywrightTests-Integration
+   cache:
+     key: ${CI_COMMIT_REF_SLUG}
+     paths:
+       - node_modules/
+   script:
+     - npm run start &
+     - npx playwright test playwrightTests/test2.spec.js
+   artifacts:
+     when: always
+     paths:
+       - playwright-report/
+   allow_failure: true
+
+Like consistency:
+  stage: PlaywrightTests-Integration
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npm run start &
+    - npx playwright test playwrightTests/LikeConsistency.spec.js
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+  allow_failure: true
+
+Like without login:
+  stage: PlaywrightTests-Integration
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npm run start &
+    - npx playwright test playwrightTests/LikeWithoutLogin.spec.js
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+  allow_failure: true
+
+Performance test:
+  stage: PlaywrightTests-System
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - npm run start & echo $! > .pidfile
+    - cat .pidfile
+    - ps aux
+    - npx playwright test playwrightTests/PerformanceTest.spec.js
+    - kill -9 $(cat .pidfile) || pkill -f "npm run start"
+
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+  allow_failure: true
+
+
+
+developDeploy:
+  stage: deploy
+  tags:
+    - production
+  only:
+    - develop
+  script:
+    - rm -rf /home/ubuntu/frontend-dev-studentschoice/static
+    - mv build/* /home/ubuntu/frontend-dev-studentschoice
+
+
+mainDeploy:
+  stage: deploy
+  tags:
+    - production
+  only:
+    - main
+  script:
+    - rm -rf /home/ubuntu/frontend-studentschoice/static
+    - mv build/* /home/ubuntu/frontend-studentschoice
