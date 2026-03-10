@@ -1,0 +1,92 @@
+name: Build & Deploy (develop)
+
+on:
+  push:
+    branches: ["develop"]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        env:
+          CI: "" # don't treat warnings as errors in CRA
+        run: npm run build
+
+      - name: Inject build info
+        run: |
+          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          sed -i "s#</head>#<meta name=\"build-info\" content=\"branch=${GITHUB_REF_NAME};commit=${GITHUB_SHA:0:7};built=${DATE}\"></head>#g" build/index.html
+          grep -n 'meta name="build-info"' build/index.html || true
+
+      - name: Pack build
+        run: tar -C build -czf build.tgz .
+
+      - name: Upload via SSH & deploy atomically
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY_B64: ${{ secrets.SSH_KEY_B64 }}
+        run: |
+          set -euo pipefail
+
+          # Validate & defaults
+          : "${SSH_HOST:?SSH_HOST is required}"
+          : "${SSH_USER:?SSH_USER is required}"
+          PORT="${SSH_PORT:-22}"
+          echo "Using host=$SSH_HOST, port=$PORT, user=$SSH_USER"
+
+          # Restore private key from base64
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Trust host key
+          ssh-keyscan -p "$PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          # Upload build package
+          scp -i ~/.ssh/id_ed25519 -P "$PORT" build.tgz "$SSH_USER@$SSH_HOST:/home/ubuntu/"
+
+          # Remote deploy
+          ssh -i ~/.ssh/id_ed25519 -p "$PORT" "$SSH_USER@$SSH_HOST" bash -c '
+            set -euo pipefail
+            PROD_DIR=/home/ubuntu/frontend-dev-studentschoice
+            BACKUP_DIR=/home/ubuntu/frontend-dev-studentschoice_backup
+
+            TMP_DIR=/home/ubuntu/.deploy_tmp_$(date -u +%Y%m%d%H%M%S)
+
+            mkdir -p "$PROD_DIR" "$BACKUP_DIR" "$TMP_DIR"
+
+            # Extract to tmp and validate
+            tar -C "$TMP_DIR" -xzf /home/ubuntu/build.tgz
+            rm -f /home/ubuntu/build.tgz
+            test -f "$TMP_DIR/index.html"
+
+            # Backup old release (keep 3 latest)
+            ts=$(date -u +%Y%m%d%H%M%S)
+            tar -C "$PROD_DIR" -czf "$BACKUP_DIR/$ts.tgz" . || true
+            ls -1t "$BACKUP_DIR" | tail -n +4 | xargs -r -I{} rm -f "$BACKUP_DIR/{}"
+
+            # Deploy (remove outdated files)
+            rsync -a --delete "$TMP_DIR"/ "$PROD_DIR"/
+
+            # Cleanup
+            rm -rf "$TMP_DIR"
+
+            # Reload nginx (passwordless sudo recommended; otherwise safe to skip)
+            sudo nginx -t && sudo systemctl reload nginx || true
+          '

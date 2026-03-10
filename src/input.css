@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* Text Stylings */
+.titleTextPrimary {
+    @apply text-center sm:text-left mb-0 sm:ml-10 text-5xl sm:text-6xl font-bold text-sc-red dark:text-gray-300;
+}
+
+.titleTextSecondary {
+    @apply w-full text-left text-3xl font-bold ml-4 text-sc-red dark:text-gray-300 mt-10;
+}
+
+.primaryPageSizing {
+    @apply relative w-[90%] sm:w-[97%] px-[1%] pb-1 mx-auto;
+}
+
+/* Div Stylings */
+.fieldSelectedStyling {
+    @apply my-[1%] relative rounded-md shadow-md text-center text-xl p-[5%] font-bold scale-[0.9] text-white bg-sc-red sm:hover:shadow-xl transition duration-300 cursor-pointer;
+}
+
+.fieldStyling {
+    @apply my-[1%] relative rounded-md shadow-md text-center items-center align-middle text-xl p-[5%] font-bold scale-[0.9] bg-white dark:bg-gray-600 text-gray-600 dark:text-gray-200 sm:hover:shadow-xl transition duration-300 cursor-pointer;
+}
+
+.sortStyling {
+    @apply text-xl p-[3%] bg-white dark:bg-gray-600 rounded-md ml-4 text-gray-600 dark:text-gray-300 shadow-md sm:hover:shadow-xl transition duration-300;
+}
+
+/* University Logo Stylings */
+.uniStyling {
+    @apply scale-[0.9] rounded-md shadow-md bg-white dark:bg-gray-300 sm:hover:shadow-xl p-4 ring-4 ring-inset ring-transparent transition duration-300;
+}
+
+.uniStylingSelected {
+    @apply scale-[0.9] rounded-md shadow-md bg-white dark:bg-gray-300 sm:hover:shadow-xl p-4 ring-4 ring-inset ring-sc-red transition duration-300;
+}
+
+.allUniStylingSelected {
+    @apply scale-[0.9] rounded-md shadow-md bg-sc-red sm:hover:shadow-xl p-4
+}
+
+.uniStylingSize {
+    @apply h-[10vh] sm:h-[15vh];
+}
+
+/* Pop Up Styling */
+.popUpStyling {
+    @apply w-full h-full bg-white dark:bg-gray-800 p-2 sm:p-[20px] shadow-md flex flex-col items-center overflow-y-auto;
+}
+
+.popUpButtonStyling {
+    @apply bg-white dark:bg-gray-600 shadow-md rounded-md flex justify-evenly items-center text-sc-red dark:text-gray-200 font-bold cursor-pointer w-3/4 sm:w-1/2 py-2 px-4 mx-auto mt-5 mb-2 sm:hover:shadow-xl transition duration-300;
+}
+
+.popUpButtonStyling2 {
+    @apply shadow-md rounded-md flex justify-evenly items-center text-white dark:text-gray-200 font-bold cursor-pointer w-3/4 sm:w-1/2 py-2 px-4 mx-auto mt-5 mb-2 sm:hover:shadow-xl transition duration-300;
+}
+
+.editTextStyling {
+    @apply text-left text-sc-red dark:text-gray-200 font-bold text-lg sm:text-2xl ml-3;
+}
+
+.editInputStyling {
+    @apply appearance-none w-full m-2 rounded-md shadow-inner bg-gray-100 dark:bg-gray-600 p-3 text-gray-600 dark:text-gray-200;
+}
+
+.blueEditStyling {
+    @apply cursor-pointer inline-block bg-rose-900 hover:bg-rose-950 text-white font-bold py-2 px-4 rounded transition duration-300 w-full;
+}
+
+.inputTitleText {
+    @apply w-full text-left text-xl font-bold ml-4 text-sc-red dark:text-gray-300;
+}
+
+.universityList {
+    @apply text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 w-full rounded-xl p-2 absolute max-h-48 overflow-scroll;
+}

@@ -1,0 +1,41 @@
+name: Build and Deploy (develop)
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    env:
+      NODE_OPTIONS: --max_old_space_size=6144   
+      GENERATE_SOURCEMAP: "false"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: |
+          unset CI
+          npm run build
+
+      - name: Clean existing static folder
+        run: |
+          echo "Cleaning /home/ubuntu/frontend-dev-studentschoice/static"
+          sudo rm -rf /home/ubuntu/frontend-dev-studentschoice/static
+
+      - name: Deploy build output
+        run: |
+          echo "Moving build output to /home/ubuntu/frontend-dev-studentschoice/"
+          sudo mv build/* /home/ubuntu/frontend-dev-studentschoice/
