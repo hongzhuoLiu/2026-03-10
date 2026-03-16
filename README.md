@@ -6,7 +6,7 @@ Students Choice is a forum for university students that allows students to provi
 ## Team Members and Roles
 |uID|Name|Role|
 |:--------:|:------------------:|:-------------------------------------:|
-| u6468401 | June Hong          | Full Stack                            |
+| u8044862 | Hongzhuoliu        | Full Stack                            |
 | u7080498 | Sithum Dissanayake | Leader, Back End, Spokesperson        |
 | u7366305 | Max (Wanglin) Song | Back End                              |
 | u7481361 | Jack Hodges        | Front End                             |
